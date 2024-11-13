@@ -46,6 +46,8 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
+      - name: Install jq
+        run: sudo apt-get install -y jq
 
       # Verifica se uma release com a tag já existe e a exclui
       - name: Delete existing release if exists
@@ -75,7 +77,9 @@ jobs:
           prerelease: false
 
       - name: Set upload_url output
-        run: echo "upload_url=${{ steps.create_release.outputs.upload_url }}" >> $GITHUB_ENV
+        run: |
+          echo "upload_url=${{ steps.create_release.outputs.upload_url }}" >> $GITHUB_ENV
+          echo "upload_url=${{ steps.create_release.outputs.upload_url }}"
 
       - name: Upload JAR to Release
         uses: actions/upload-release-asset@v1
