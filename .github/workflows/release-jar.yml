@@ -22,11 +22,14 @@ jobs:
       - name: Build with Maven
         run: mvn -X clean package --file pom.xml
 
+      - name: List target directory contents
+        run: ls -la target
+
       - name: Upload JAR as artifact
         uses: actions/upload-artifact@v4
         with:
           name: myapp.jar
-          path: target/*.jar
+          path: target/MyApp-1.0-SNAPSHOT.jar
 
   release:
     needs: build
