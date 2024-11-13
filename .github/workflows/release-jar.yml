@@ -11,10 +11,10 @@ jobs:
 
     steps:
       - name: Check out repository code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         
       - name: Set up JDK 17
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'temurin'
@@ -23,7 +23,7 @@ jobs:
         run: mvn -X clean package --file pom.xml
 
       - name: Upload JAR as artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: myapp.jar
           path: target/*.jar
@@ -33,7 +33,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       # Verifica se uma release com a tag já existe e a exclui
       - name: Delete existing release if exists
@@ -53,7 +53,7 @@ jobs:
 
       - name: Create GitHub Release
         id: create_release
-        uses: actions/create-release@v1
+        uses: actions/create-release@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -64,6 +64,10 @@ jobs:
 
       - name: List target directory contents
         run: ls -la target
+
+      - name: Set upload_url output
+        if: steps.create_release.outputs.upload_url != ''
+        run: echo "upload_url=${{ steps.create_release.outputs.upload_url }}" >> $GITHUB_ENV
 
       - name: Upload JAR to Release
         uses: actions/upload-release-asset@v1
