@@ -62,11 +62,7 @@ jobs:
           draft: false
           prerelease: false
 
-      - name: List target directory contents
-        run: ls -la target
-
       - name: Set upload_url output
-        if: steps.create_release.outputs.upload_url != ''
         run: echo "upload_url=${{ steps.create_release.outputs.upload_url }}" >> $GITHUB_ENV
 
       - name: Upload JAR to Release
@@ -74,7 +70,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          upload_url: ${{ env.upload_url }}
           asset_path: target/*.jar
           asset_name: myapp.jar
           asset_content_type: application/java-archive
